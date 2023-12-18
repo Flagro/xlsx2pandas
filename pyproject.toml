@@ -1,0 +1,20 @@
+[build-system]
+requires = [
+    "setuptools>=40.6.0",
+    "wheel"
+]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "projecttextexcel"
+version = "0.1.0"
+description = "Library for obtaining pandas dataframes from xlsx and xlsm files"
+readme = "README.md"
+authors = [
+    { name="Anton Potapov", email="fgreyeducation@gmail.com" }
+]
+license = { file="LICENSE" }
+dependencies = [
+    "openpyxl",
+    "pandas"
+]
