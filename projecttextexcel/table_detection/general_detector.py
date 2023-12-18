@@ -1,5 +1,5 @@
 from .utils import BaseTableDetector
 
 class GeneralTableDetector(BaseTableDetector):
-    def get_dataframes(self, openpyxl_ws, **kwargs):
+    def get_table_ranges(self, openpyxl_ws, **kwargs):
         pass
