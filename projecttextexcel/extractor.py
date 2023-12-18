@@ -1,17 +1,8 @@
-import io
 import pandas as pd
 from typing import Optional, List, Dict, Union
 from openpyxl import load_workbook
 from .strategies.utils import get_strategy_parser
-
-
-def get_in_memory_file(file_path):
-    """
-    Returns an in-memory file of the xlsx/xlsm file.
-    """
-    with open(file_path, "rb") as f:
-        in_memory_file = io.BytesIO(f.read())
-    return in_memory_file
+from .utils import get_in_memory_file
 
 
 def get_df(file_path, 
