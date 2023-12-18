@@ -14,7 +14,7 @@ class BaseExcelParser(ABC):
 def get_strategy_parser(strategy):
     try:
         # Dynamically import the strategy class
-        strategy_module = importlib.import_module(f".{strategy}", __package__)
+        strategy_module = importlib.import_module(f".{strategy}_strategy", __package__)
     except ImportError:
         raise ValueError(f"Strategy {strategy} not found.")
 
