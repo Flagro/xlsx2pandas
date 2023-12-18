@@ -2,25 +2,25 @@ import importlib
 from abc import ABC, abstractmethod
 
 
-class BaseExcelParser(ABC):
+class BaseTableDetector(ABC):
     def __init__(self):
         pass
 
     @abstractmethod
-    def get_dataframes(self, **kwargs):
+    def get_dataframes(self, openpyxl_ws, **kwargs):
         pass
 
 
-def get_strategy_parser(strategy):
+def get_table_detector(strategy):
     try:
         # Dynamically import the strategy class
-        strategy_module = importlib.import_module(f".{strategy}_strategy", __package__)
+        strategy_module = importlib.import_module(f".{strategy}_detector", __package__)
     except ImportError:
         raise ValueError(f"Strategy {strategy} not found.")
 
     # Get the strategy class
     strategy_class = getattr(strategy_module, "ExcelParser")
-    if not issubclass(strategy_class, BaseExcelParser):
+    if not issubclass(strategy_class, BaseTableDetector):
         raise TypeError("Invalid strategy type.")
 
     # Create an instance of the strategy and parse the file
