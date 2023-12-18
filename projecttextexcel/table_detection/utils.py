@@ -19,7 +19,7 @@ def get_table_detector(strategy):
         raise ValueError(f"Strategy {strategy} not found.")
 
     # Get the strategy class
-    strategy_class = getattr(strategy_module, "ExcelParser")
+    strategy_class = getattr(strategy_module, "TableDetector")
     if not issubclass(strategy_class, BaseTableDetector):
         raise TypeError("Invalid strategy type.")
 
