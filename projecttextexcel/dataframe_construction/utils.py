@@ -14,7 +14,7 @@ class BaseDataFrameConstructor(ABC):
         pass
 
 
-def get_header_separator(strategy):
+def get_dataframe_constructor(strategy):
     try:
         # Dynamically import the strategy class
         strategy_module = importlib.import_module(f".{strategy}_constructor", __package__)
