@@ -1,5 +1,6 @@
 from openpyxl.utils import range_boundaries
 from .utils import BaseHeaderSeparator
+from ..openpyxl_utils import get_merged_cell
 
 
 def get_cell_type(self, cell):
@@ -28,6 +29,7 @@ class HeaderSeparator(BaseHeaderSeparator):
         for row_idx, row in enumerate(openpyxl_ws.iter_rows(min_row=min_row, max_row=max_row, min_col=min_col, max_col=max_col)):
             last_types = [None] * (max_col - min_col + 1)
             for col_idx, cell in enumerate(row):
+                cell = get_merged_cell(openpyxl_ws, cell)
                 cell_type = self.get_cell_type(cell)
 
                 # Update score based on type change
