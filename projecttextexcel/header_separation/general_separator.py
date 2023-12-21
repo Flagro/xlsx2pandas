@@ -1,20 +1,6 @@
 from openpyxl.utils import range_boundaries
 from .utils import BaseHeaderSeparator
-from ..openpyxl_utils import get_merged_cell
-
-
-def get_cell_type(self, cell):
-        """ Determine the type of a cell's value. """
-        if cell.data_type == 'n':
-            return "float" if '.' in str(cell.value) else "int"
-        elif cell.data_type == 'd':
-            return "datetime"
-        elif cell.data_type == 's':
-            return "str"
-        elif cell.data_type == 'f':
-            return 'formula'
-        else:
-            return 'unknown'
+from ..openpyxl_utils import get_merged_cell, get_cell_type
 
 
 class HeaderSeparator(BaseHeaderSeparator):
