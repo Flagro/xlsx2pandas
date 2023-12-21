@@ -25,17 +25,16 @@ class HeaderSeparator(BaseHeaderSeparator):
         header_scores = [0] * (max_row - min_row + 1)
 
         # Iterate through columns and rows
-        for col in range(min_col, max_col + 1):
-            last_type = None
-            for row in range(min_row, max_row + 1):
-                cell = openpyxl_ws.cell(row, col)
-                cell_type = get_cell_type(cell)
+        for row_idx, row in enumerate(openpyxl_ws.iter_rows(min_row=min_row, max_row=max_row, min_col=min_col, max_col=max_col)):
+            last_types = [None] * (max_col - min_col + 1)
+            for col_idx, cell in enumerate(row):
+                cell_type = self.get_cell_type(cell)
 
                 # Update score based on type change
-                if cell_type != last_type and last_type is not None:
-                    header_scores[row - min_row] += self.get_type_change_score(last_type, cell_type, **kwargs)
+                if cell_type != last_types[col_idx] and last_types[col_idx] is not None:
+                    header_scores[row_idx] += self.get_type_change_score(last_types[col_idx], cell_type, **kwargs)
                 
-                last_type = cell_type
+                last_types[col_idx] = cell_type
 
         # Predict number of header rows
         return header_scores.index(max(header_scores)) + 1
