@@ -1,28 +1,25 @@
-from openpyxl.utils import range_boundaries
 from .utils import BaseHeaderSeparator
-from ..openpyxl_utils import get_merged_cell, get_cell_type
+from openpyxl.utils import range_boundaries
+from ..openpyxl_utils import get_merged_cell, get_cell_type, range_generator
 
 
 class HeaderSeparator(BaseHeaderSeparator):
     def get_header_rows_cnt(self, openpyxl_ws, table_range, **kwargs):
         # Parse the table range
         min_col, min_row, max_col, max_row = range_boundaries(table_range)
-
         # Initialize variables
         header_scores = [0] * (max_row - min_row + 1)
-
+        last_types = [None] * (max_col - min_col + 1)
         # Iterate through columns and rows
-        for row_idx, row in enumerate(openpyxl_ws.iter_rows(min_row=min_row, max_row=max_row, min_col=min_col, max_col=max_col)):
-            last_types = [None] * (max_col - min_col + 1)
-            for col_idx, cell in enumerate(row):
-                cell = get_merged_cell(openpyxl_ws, cell)
-                cell_type = self.get_cell_type(cell)
+        for row_idx, col_idx, cell in range_generator(openpyxl_ws, table_range):
+            cell = get_merged_cell(openpyxl_ws, cell)
+            cell_type = get_cell_type(cell)
 
-                # Update score based on type change
-                if cell_type != last_types[col_idx] and last_types[col_idx] is not None:
-                    header_scores[row_idx] += self.get_type_change_score(last_types[col_idx], cell_type, **kwargs)
-                
-                last_types[col_idx] = cell_type
+            # Update score based on type change
+            if cell_type != last_types[col_idx - min_col] and last_types[col_idx - min_col] is not None:
+                header_scores[row_idx - min_row] += self.get_type_change_score(last_types[col_idx - min_col], cell_type, **kwargs)
+            
+            last_types[col_idx - min_col] = cell_type
 
         # Predict number of header rows
         return header_scores.index(max(header_scores)) + 1

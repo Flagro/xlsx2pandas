@@ -1,3 +1,6 @@
+from openpyxl.utils import range_boundaries
+
+
 def get_merged_cell(openpyxl_ws, openpyxl_cell):
     merged_range = [s for s in openpyxl_ws.merged_cells.ranges if openpyxl_cell.coordinate in s]
     if merged_range:
@@ -18,3 +21,15 @@ def get_cell_type(cell):
         return 'formula'
     else:
         return 'unknown'
+
+
+def range_generator(openpyxl_ws, table_range):
+    """
+    Generator function to iterate over a range in the worksheet.
+    Yields (row_index, column_index, cell).
+    """
+    min_col, min_row, max_col, max_row = range_boundaries(table_range)
+    # Iterate through columns and rows
+    for row_idx, row in enumerate(openpyxl_ws.iter_rows(min_row=min_row, max_row=max_row, min_col=min_col, max_col=max_col)):
+        for col_idx, cell in enumerate(row):
+            yield row_idx, col_idx, cell
