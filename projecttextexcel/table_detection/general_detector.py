@@ -14,7 +14,7 @@ class TableDetector(BaseTableDetector):
 
         for row in openpyxl_ws.iter_rows():
             for cell in row:
-                if cell.coordinate in visited or is_empty(cell):
+                if is_empty(cell) or cell.coordinate in visited:
                     continue
 
                 # Initialize boundaries of the table
