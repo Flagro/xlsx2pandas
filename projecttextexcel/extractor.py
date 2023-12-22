@@ -8,7 +8,7 @@ from .utils import get_in_memory_file, prettify_workbook_dataframes_output
 
 
 def get_df(file_path, 
-           sheet_names: Optional[Union[str, List[str]]], 
+           sheet_names: Optional[Union[str, List[str]]]=None, 
            table_detection_strategy='general',
            header_separator_strategy='general',
            dataframe_construction_strategy='general',
