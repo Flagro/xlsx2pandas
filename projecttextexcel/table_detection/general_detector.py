@@ -3,7 +3,7 @@ from .utils import BaseTableDetector
 
 
 def is_empty(cell):
-    return cell is None or cell.value is None
+    return cell is None or cell.value is None or cell.value == ""
 
 
 class TableDetector(BaseTableDetector):
