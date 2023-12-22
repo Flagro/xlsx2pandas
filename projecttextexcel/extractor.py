@@ -1,3 +1,4 @@
+import warnings
 import pandas as pd
 from typing import Optional, List, Dict, Union
 from openpyxl import load_workbook
@@ -42,18 +43,18 @@ def get_df(file_path,
             # Get the table ranges in a list
             try:
                 sheet_table_ranges = table_detector.get_table_ranges(ws, **kwargs)
-            except:
+            except Exception as e:
                 sheet_table_ranges = []
-                # log: f"Sheet {sheet} could not be parsed."
+                warnings.warn(f"Sheet {sheet} could not be parsed. Details: {e}")
             
             # Get header rows counters in a list
             sheet_header_rows_cnt = []
             for table_range in sheet_table_ranges:
                 try:
                     header_rows_cnt = header_separator.get_header_rows_cnt(ws, table_range, **kwargs)
-                except:
+                except Exception as e:
                     header_rows_cnt = 1
-                    # log: f"Sheet {sheet} could not be parsed. Defaulting to 1 header row."
+                    warnings.warn(f"Sheet {sheet} could not be parsed for header rows. Defaulting to 1 header row. Details: {e}")
                 sheet_header_rows_cnt.append(header_rows_cnt)
 
             # Construct the dataframes from the table ranges and header rows counters
@@ -62,9 +63,8 @@ def get_df(file_path,
                 try:
                     df = dataframe_constructor.construct_dataframe(ws, table_range, header_rows_cnt, **kwargs)
                     sheet_dataframes.append(df)
-                except:
-                    pass
-                    # log: f"Error constructing a DF on a sheet {sheet}, table range {table_range}, header rows cnt {header_rows_cnt}."
+                except Exception as e:
+                    warnings.warn(f"Error constructing a DataFrame on sheet {sheet}, table range {table_range}, header rows cnt {header_rows_cnt}. Details: {e}")
             dataframes_dict[sheet] = sheet_dataframes
     wb.close()
 
