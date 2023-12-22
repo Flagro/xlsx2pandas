@@ -43,7 +43,7 @@ def get_df(file_path,
             try:
                 sheet_table_ranges = table_detector.get_table_ranges(ws, **kwargs)
             except:
-                pass
+                sheet_table_ranges = []
                 # log: f"Sheet {sheet} could not be parsed."
             
             # Get header rows counters in a list
