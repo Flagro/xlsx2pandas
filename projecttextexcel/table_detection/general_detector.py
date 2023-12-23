@@ -40,19 +40,20 @@ class TableDetector(BaseTableDetector):
         tables = []
         visited = set()
 
-        for row in openpyxl_ws.iter_rows():
-            for cell in row:
-                if cell.coordinate in visited or is_empty(cell):
+        for row_idx, row in enumerate(openpyxl_ws.iter_rows(), start=1):
+            for col_idx, cell in enumerate(row, start=1):
+                cell_coord = f"{get_column_letter(col_idx)}{row_idx}"
+
+                if cell_coord in visited or is_empty(cell):
                     continue
 
-                end_row, end_col = self.find_table_end(openpyxl_ws, cell.row, cell.column)
-                table_range = f"{openpyxl.utils.get_column_letter(cell.column)}{cell.row}:" \
-                              f"{openpyxl.utils.get_column_letter(end_col)}{end_row}"
+                end_row, end_col = self.find_table_end(openpyxl_ws, row_idx, col_idx)
+                table_range = f"{get_column_letter(col_idx)}{row_idx}:{get_column_letter(end_col)}{end_row}"
                 tables.append(table_range)
 
                 # Mark cells as visited
-                for r in range(cell.row, end_row + 1):
-                    for c in range(cell.column, end_col + 1):
-                        visited.add((r, c))
+                for r in range(row_idx, end_row + 1):
+                    for c in range(col_idx, end_col + 1):
+                        visited.add(f"{get_column_letter(c)}{r}")
 
         return tables
