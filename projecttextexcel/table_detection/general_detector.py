@@ -10,12 +10,16 @@ def is_empty(cell):
 class TableDetector(BaseTableDetector):
     def find_table_end(self, openpyxl_ws, start_row, start_col):
         max_row = start_row
+        ws_max_row = openpyxl_ws.max_row
         max_col = start_col
+        ws_max_col = openpyxl_ws.max_column
         empty_row_count = 0
         empty_col_count = 0
 
+        print(ws_max_row, ws_max_col)
+
         # Iterate over rows
-        for i in range(start_row, openpyxl_ws.max_row + 1):
+        for i in range(start_row, ws_max_row + 1):
             if all(is_empty(openpyxl_ws.cell(row=i, column=j)) for j in range(start_col, max_col + 1)):
                 empty_row_count += 1
             else:
@@ -26,7 +30,7 @@ class TableDetector(BaseTableDetector):
                 break
 
         # Iterate over columns
-        for j in range(start_col, openpyxl_ws.max_column + 1):
+        for j in range(start_col, ws_max_col + 1):
             if all(is_empty(openpyxl_ws.cell(row=i, column=j)) for i in range(start_row, max_row + 1)):
                 empty_col_count += 1
             else:
