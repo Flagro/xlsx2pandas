@@ -14,22 +14,24 @@ class TableDetector(BaseTableDetector):
         empty_row_count = 0
         empty_col_count = 0
 
-        for row in openpyxl_ws.iter_rows(min_row=start_row, max_col=openpyxl_ws.max_column, max_row=openpyxl_ws.max_row):
-            if all(is_empty(cell) for cell in row[start_col - 1:]):
+        # Iterate over rows
+        for i in range(start_row, openpyxl_ws.max_row + 1):
+            if all(is_empty(openpyxl_ws.cell(row=i, column=j)) for j in range(start_col, max_col + 1)):
                 empty_row_count += 1
             else:
                 empty_row_count = 0
-                max_row = row[0].row
+                max_row = i
 
             if empty_row_count > 1:
                 break
 
-        for col in openpyxl_ws.iter_cols(min_col=start_col, max_row=openpyxl_ws.max_row, max_col=openpyxl_ws.max_column):
-            if all(is_empty(cell) for cell in col[start_row - 1:max_row]):
+        # Iterate over columns
+        for j in range(start_col, openpyxl_ws.max_column + 1):
+            if all(is_empty(openpyxl_ws.cell(row=i, column=j)) for i in range(start_row, max_row + 1)):
                 empty_col_count += 1
             else:
                 empty_col_count = 0
-                max_col = col[0].column
+                max_col = j
 
             if empty_col_count > 1:
                 break
