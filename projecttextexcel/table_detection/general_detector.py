@@ -9,7 +9,7 @@ def is_empty(cell):
 
 class TableDetector(BaseTableDetector):
     def find_table_end(self, openpyxl_ws, start_row, start_col):
-        ws_range = openpyxl_ws.calculate_dimension()
+        ws_range = openpyxl_ws.calculate_dimension(force=True)
         _, ws_max_row, _, ws_max_col = range_boundaries(ws_range)
         max_row = start_row
         max_col = start_col
