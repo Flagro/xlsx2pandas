@@ -1,5 +1,5 @@
 import openpyxl
-from openpyxl.utils import get_column_letter
+from openpyxl.utils import get_column_letter, range_boundaries
 from .utils import BaseTableDetector
 
 
@@ -9,14 +9,12 @@ def is_empty(cell):
 
 class TableDetector(BaseTableDetector):
     def find_table_end(self, openpyxl_ws, start_row, start_col):
+        ws_range = openpyxl_ws.calculate_dimension()
+        _, ws_max_row, _, ws_max_col = range_boundaries(ws_range)
         max_row = start_row
-        ws_max_row = openpyxl_ws.max_row
         max_col = start_col
-        ws_max_col = openpyxl_ws.max_column
         empty_row_count = 0
         empty_col_count = 0
-
-        print(ws_max_row, ws_max_col)
 
         # Iterate over rows
         for i in range(start_row, ws_max_row + 1):
