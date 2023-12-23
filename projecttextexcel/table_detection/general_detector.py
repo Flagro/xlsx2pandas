@@ -8,7 +8,7 @@ def is_empty(cell):
 
 
 class TableDetector(BaseTableDetector):
-    def find_table_end(openpyxl_ws, start_row, start_col):
+    def find_table_end(self, openpyxl_ws, start_row, start_col):
         max_row = start_row
         max_col = start_col
         empty_row_count = 0
