@@ -42,7 +42,7 @@ class TableDetector(BaseTableDetector):
 
         for row in openpyxl_ws.iter_rows():
             for cell in row:
-                if cell.coordinate in visited or is_empty_cell(cell):
+                if cell.coordinate in visited or is_empty(cell):
                     continue
 
                 end_row, end_col = self.find_table_end(openpyxl_ws, cell.row, cell.column)
