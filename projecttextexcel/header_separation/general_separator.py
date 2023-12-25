@@ -22,7 +22,7 @@ class HeaderSeparator(BaseHeaderSeparator):
             last_types[col_idx - min_col] = cell_type
 
         # Predict number of header rows
-        return header_scores.index(max(header_scores)) + 1
+        return header_scores.index(max(header_scores[:15]))
     
     def get_type_change_score(self, last_type, current_type, **kwargs):
         """ Weighted scoring for type change. """
