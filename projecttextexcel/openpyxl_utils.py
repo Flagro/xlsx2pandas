@@ -11,7 +11,7 @@ def get_merged_openpyxl_cell(openpyxl_ws, openpyxl_cell):
     if merged_range:
         return openpyxl_ws.cell(merged_range[0].min_row, merged_range[0].min_col)
     else:
-        openpyxl_cell
+        return openpyxl_cell
 
 
 def get_cell_type(cell):

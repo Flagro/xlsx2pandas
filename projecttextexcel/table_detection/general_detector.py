@@ -16,7 +16,6 @@ class TableDetector(BaseTableDetector):
         non_empty_cells_tables = dict()
         # Get all cells based on a certain requirement (emptiness in this case)
         for row_idx, col_idx, cell in range_generator(openpyxl_ws):
-            print(f"Row: {row_idx}, Col: {col_idx}", cell, get_merged_openpyxl_cell(openpyxl_ws, cell), is_cell_empty(cell))
             cell = get_merged_openpyxl_cell(openpyxl_ws, cell)
             if not is_cell_empty(cell):
                 non_empty_cells_tables[(row_idx, col_idx)] = None
