@@ -1,70 +1,53 @@
 import openpyxl
-from openpyxl.utils import get_column_letter, range_boundaries, is_cell_empty
+from openpyxl.utils import get_column_letter
+from ..openpyxl_utils import get_merged_cell, range_generator, is_cell_empty, get_excel_coordinate
 from .utils import BaseTableDetector
 
 
+def dfs_cluster_search(cur_point, cur_table, table_dict, allowed_horizontal_gap=1, allowed_vertical_gap=1):
+    for dx in range(-allowed_vertical_gap, allowed_vertical_gap + 1):
+        for dy in range(-allowed_horizontal_gap, allowed_horizontal_gap + 1):
+            next_point = (cur_point[0] + dx, cur_point[1] + dy)
+            if next_point in table_dict and table_dict[next_point] is None:
+                table_dict[next_point] = cur_table
+                dfs_cluster_search(next_point, cur_table, table_dict)
+
+
 class TableDetector(BaseTableDetector):
-    def find_table_end(self, openpyxl_ws, start_row, start_col):
-        ws_range = openpyxl_ws.calculate_dimension(force=True)
-        _, ws_max_row, _, ws_max_col = range_boundaries(ws_range)
-        max_row = start_row
-        max_col = start_col
-        empty_row_count = 0
-        empty_col_count = 0
-
-        # Horizontal Expansion
-        for j in range(start_col, ws_max_col + 1):
-            column_empty = True
-            for i in range(start_row, ws_max_row + 1):
-                if not is_cell_empty(openpyxl_ws.cell(row=i, column=j)):
-                    column_empty = False
-                    max_row = max(max_row, i)  # Update max_row based on this column's data
-                    break
-
-            if column_empty:
-                empty_col_count += 1
-                if empty_col_count > 1:
-                    break
-            else:
-                empty_col_count = 0
-                max_col = j
-
-        # Vertical Expansion
-        for i in range(start_row, max_row + 1):
-            row_empty = True
-            for j in range(start_col, max_col + 1):
-                if not is_cell_empty(openpyxl_ws.cell(row=i, column=j)):
-                    row_empty = False
-                    break
-
-            if row_empty:
-                empty_row_count += 1
-                if empty_row_count > 1:
-                    break
-            else:
-                empty_row_count = 0
-                max_row = i
-
-        return max_row, max_col
-
     def get_table_ranges(self, openpyxl_ws, **kwargs):
+        non_empty_cells_tables = dict()
+        # Get all cells based on a certain requirement (emptiness in this case)
+        for row_idx, col_idx, cell in range_generator(openpyxl_ws):
+            cell = get_merged_cell(openpyxl_ws, cell)
+            if not is_cell_empty(cell):
+                non_empty_cells_tables[(row_idx, col_idx)] = None
+
+        # Join cells in continuous ranges
+        for i, cell_coordinate in enumerate(non_empty_cells_tables.keys(), start=1):
+            if non_empty_cells_tables[cell] is None:
+                dfs_cluster_search(cell_coordinate, i, non_empty_cells_tables, 2, 2)
+        
+        # For each range get tuple (min_col, min_row, max_col, max_row)
+        continuous_ranges = dict()
+        for cell_coordinate, table_idx in non_empty_cells_tables.items():
+            if table_idx not in continuous_ranges:
+                continuous_ranges[table_idx] = (cell_coordinate[1], cell_coordinate[0], cell_coordinate[1], cell_coordinate[0])
+            else:
+                continuous_ranges[table_idx] = (
+                    min(continuous_ranges[table_idx][0], cell_coordinate[1]),
+                    min(continuous_ranges[table_idx][1], cell_coordinate[0]),
+                    max(continuous_ranges[table_idx][2], cell_coordinate[1]),
+                    max(continuous_ranges[table_idx][3], cell_coordinate[0])
+                )
+        ranges = continuous_ranges.values()
+
+        # Apply waterfall algorithm to find the lower bound of each table
+        merged_ranges = ranges
+        # TODO: implement ranges merge operation based on datatype changes and range horizontal lengths
+
+        # Convert to A1 notation
         tables = []
-        visited = set()
-
-        for row_idx, row in enumerate(openpyxl_ws.iter_rows(), start=1):
-            for col_idx, cell in enumerate(row, start=1):
-                cell_coord = f"{get_column_letter(col_idx)}{row_idx}"
-
-                if cell_coord in visited or is_cell_empty(cell):
-                    continue
-
-                end_row, end_col = self.find_table_end(openpyxl_ws, row_idx, col_idx)
-                table_range = f"{get_column_letter(col_idx)}{row_idx}:{get_column_letter(end_col)}{end_row}"
-                tables.append(table_range)
-
-                # Mark cells as visited
-                for r in range(row_idx, end_row + 1):
-                    for c in range(col_idx, end_col + 1):
-                        visited.add(f"{get_column_letter(c)}{r}")
+        for min_col, min_row, max_col, max_row in merged_ranges:
+            tables.append(get_excel_coordinate(min_col, min_row, max_col, max_row))
 
         return tables
