@@ -41,30 +41,30 @@ def get_df(file_path,
         else:
             ws = wb[sheet]
             # Get the table ranges in a list
-            try:
-                sheet_table_ranges = table_detector.get_table_ranges(ws, **kwargs)
-            except Exception as e:
-                sheet_table_ranges = []
-                warnings.warn(f"Sheet {sheet} could not be parsed. Details: {e}")
+            #try:
+            sheet_table_ranges = table_detector.get_table_ranges(ws, **kwargs)
+            #except Exception as e:
+                # sheet_table_ranges = []
+            # warnings.warn(f"Sheet {sheet} could not be parsed. Details: {e}")
             
             # Get header rows counters in a list
             sheet_header_rows_cnt = []
             for table_range in sheet_table_ranges:
-                try:
-                    header_rows_cnt = header_separator.get_header_rows_cnt(ws, table_range, **kwargs)
-                except Exception as e:
-                    header_rows_cnt = 1
-                    warnings.warn(f"Sheet {sheet} could not be parsed for header rows. Defaulting to 1 header row. Details: {e}")
+                # try:
+                header_rows_cnt = header_separator.get_header_rows_cnt(ws, table_range, **kwargs)
+                #except Exception as e:
+                #   header_rows_cnt = 1
+                #    warnings.warn(f"Sheet {sheet} could not be parsed for header rows. Defaulting to 1 header row. Details: {e}")
                 sheet_header_rows_cnt.append(header_rows_cnt)
 
             # Construct the dataframes from the table ranges and header rows counters
             sheet_dataframes = []
             for table_range, header_rows_cnt in zip(sheet_table_ranges, sheet_header_rows_cnt):
-                try:
-                    df = dataframe_constructor.construct_dataframe(ws, table_range, header_rows_cnt, **kwargs)
-                    sheet_dataframes.append(df)
-                except Exception as e:
-                    warnings.warn(f"Error constructing a DataFrame on sheet {sheet}, table range {table_range}, header rows cnt {header_rows_cnt}. Details: {e}")
+                #try:
+                df = dataframe_constructor.construct_dataframe(ws, table_range, header_rows_cnt, **kwargs)
+                sheet_dataframes.append(df)
+                #except Exception as e:
+                #    warnings.warn(f"Error constructing a DataFrame on sheet {sheet}, table range {table_range}, header rows cnt {header_rows_cnt}. Details: {e}")
             dataframes_dict[sheet] = sheet_dataframes
     wb.close()
 
