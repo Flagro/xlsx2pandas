@@ -36,7 +36,8 @@ def range_generator(openpyxl_ws, table_range=None):
     if table_range is not None:
         min_col, min_row, max_col, max_row = range_boundaries(table_range)
     else:
-        min_col, min_row, max_col, max_row = 1, 1, None, None
+        openpyxl_ws.calculate_dimension(force=True)
+        min_col, min_row, max_col, max_row = 1, 1, openpyxl_ws.max_column, openpyxl_ws.max_row
     # Iterate through columns and rows
     for row_idx, row in enumerate(openpyxl_ws.iter_rows(min_row=min_row, max_row=max_row, min_col=min_col, max_col=max_col), start=min_row):
         for col_idx, cell in enumerate(row, start=min_col):
