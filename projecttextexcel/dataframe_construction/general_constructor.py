@@ -6,7 +6,14 @@ def join_header_rows(header_rows):
     """
     Joins a list of header rows into a single list of strings by underscore.
     """
-    return [str("_".join([str(cell) for cell in row])) for row in header_rows]
+    n = len(header_rows[0])
+    headers = [""] * n
+    for row in header_rows:
+        for i, cell in enumerate(row):
+            if cell is not None:
+                headers[i] += "_" + str(cell) if headers[i] != "" else str(cell)
+    return headers
+
 
 class DataFrameConstructor(BaseDataFrameConstructor):
     def construct_dataframe(self, openpyxl_ws, table_range, header_rows_cnt, **kwargs):
