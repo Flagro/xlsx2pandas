@@ -28,7 +28,7 @@ def range_generator(openpyxl_ws, table_range=None):
     Generator function to iterate over a range in the worksheet.
     Yields (row_index, column_index, cell).
     """
-    if table_range is None:
+    if table_range is not None:
         min_col, min_row, max_col, max_row = range_boundaries(table_range)
     else:
         min_col, min_row, max_col, max_row = None, None, None, None
