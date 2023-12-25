@@ -1,6 +1,4 @@
-import openpyxl
-from openpyxl.utils import get_column_letter
-from ..openpyxl_utils import get_merged_cell, range_generator, is_cell_empty, get_excel_coordinate
+from ..openpyxl_utils import get_merged_openpyxl_cell, range_generator, is_cell_empty, get_excel_coordinate
 from .utils import BaseTableDetector
 
 
@@ -18,7 +16,7 @@ class TableDetector(BaseTableDetector):
         non_empty_cells_tables = dict()
         # Get all cells based on a certain requirement (emptiness in this case)
         for row_idx, col_idx, cell in range_generator(openpyxl_ws):
-            cell = get_merged_cell(openpyxl_ws, cell)
+            cell = get_merged_openpyxl_cell(openpyxl_ws, cell)
             if not is_cell_empty(cell):
                 non_empty_cells_tables[(row_idx, col_idx)] = None
 

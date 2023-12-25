@@ -1,6 +1,6 @@
 from .utils import BaseHeaderSeparator
 from openpyxl.utils import range_boundaries
-from ..openpyxl_utils import get_merged_cell, get_cell_type, range_generator
+from ..openpyxl_utils import get_merged_openpyxl_cell, get_cell_type, range_generator
 
 
 class HeaderSeparator(BaseHeaderSeparator):
@@ -12,7 +12,7 @@ class HeaderSeparator(BaseHeaderSeparator):
         last_types = [None] * (max_col - min_col + 1)
         # Iterate through columns and rows
         for row_idx, col_idx, cell in range_generator(openpyxl_ws, table_range):
-            cell = get_merged_cell(openpyxl_ws, cell)
+            cell = get_merged_openpyxl_cell(openpyxl_ws, cell)
             cell_type = get_cell_type(cell)
 
             # Update score based on type change
