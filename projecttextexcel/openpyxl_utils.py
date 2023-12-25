@@ -1,7 +1,7 @@
 from openpyxl.utils import range_boundaries
 
 
-def get_merged_cell(openpyxl_ws, openpyxl_cell):
+def get_merged_openpyxl_cell(openpyxl_ws, openpyxl_cell):
     merged_range = [s for s in openpyxl_ws.merged_cells.ranges if openpyxl_cell.coordinate in s]
     if merged_range:
         return openpyxl_ws.cell(merged_range[0].min_row, merged_range[0].min_col)
@@ -35,5 +35,5 @@ def range_generator(openpyxl_ws, table_range):
             yield row_idx, col_idx, cell
 
 
-def is_cell_empty(cell):
-    return cell is None or cell.value is None or cell.value == ""
+def is_cell_empty(openpyxl_cell):
+    return openpyxl_cell is None or openpyxl_cell.value is None or openpyxl_cell.value == ""
