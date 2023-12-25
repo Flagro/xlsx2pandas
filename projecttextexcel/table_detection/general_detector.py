@@ -3,11 +3,11 @@ from .utils import BaseTableDetector
 
 
 def dfs_cluster_search(cur_point, cur_table, table_dict, allowed_horizontal_gap=1, allowed_vertical_gap=1):
+    table_dict[cur_point] = cur_table
     for dx in range(-allowed_vertical_gap, allowed_vertical_gap + 1):
         for dy in range(-allowed_horizontal_gap, allowed_horizontal_gap + 1):
             next_point = (cur_point[0] + dx, cur_point[1] + dy)
             if next_point in table_dict and table_dict[next_point] is None:
-                table_dict[next_point] = cur_table
                 dfs_cluster_search(next_point, cur_table, table_dict)
 
 
