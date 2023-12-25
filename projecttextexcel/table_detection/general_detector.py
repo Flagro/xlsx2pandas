@@ -23,7 +23,7 @@ class TableDetector(BaseTableDetector):
         print(f"Non-empty cells: {non_empty_cells_tables}")
         # Join cells in continuous ranges
         for i, cell_coordinate in enumerate(non_empty_cells_tables.keys(), start=1):
-            if non_empty_cells_tables[cell] is None:
+            if non_empty_cells_tables[cell_coordinate] is None:
                 dfs_cluster_search(cell_coordinate, i, non_empty_cells_tables, 2, 2)
         
         # For each range get tuple (min_col, min_row, max_col, max_row)
