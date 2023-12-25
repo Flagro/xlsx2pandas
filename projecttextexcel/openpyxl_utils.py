@@ -33,3 +33,7 @@ def range_generator(openpyxl_ws, table_range):
     for row_idx, row in enumerate(openpyxl_ws.iter_rows(min_row=min_row, max_row=max_row, min_col=min_col, max_col=max_col)):
         for col_idx, cell in enumerate(row):
             yield row_idx, col_idx, cell
+
+
+def is_cell_empty(cell):
+    return cell is None or cell.value is None or cell.value == ""

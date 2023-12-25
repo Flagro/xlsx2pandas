@@ -1,10 +1,6 @@
 import openpyxl
-from openpyxl.utils import get_column_letter, range_boundaries
+from openpyxl.utils import get_column_letter, range_boundaries, is_cell_empty
 from .utils import BaseTableDetector
-
-
-def is_empty(cell):
-    return cell is None or cell.value is None or cell.value == ""
 
 
 class TableDetector(BaseTableDetector):
@@ -20,7 +16,7 @@ class TableDetector(BaseTableDetector):
         for j in range(start_col, ws_max_col + 1):
             column_empty = True
             for i in range(start_row, ws_max_row + 1):
-                if not is_empty(openpyxl_ws.cell(row=i, column=j)):
+                if not is_cell_empty(openpyxl_ws.cell(row=i, column=j)):
                     column_empty = False
                     max_row = max(max_row, i)  # Update max_row based on this column's data
                     break
@@ -37,7 +33,7 @@ class TableDetector(BaseTableDetector):
         for i in range(start_row, max_row + 1):
             row_empty = True
             for j in range(start_col, max_col + 1):
-                if not is_empty(openpyxl_ws.cell(row=i, column=j)):
+                if not is_cell_empty(openpyxl_ws.cell(row=i, column=j)):
                     row_empty = False
                     break
 
@@ -59,7 +55,7 @@ class TableDetector(BaseTableDetector):
             for col_idx, cell in enumerate(row, start=1):
                 cell_coord = f"{get_column_letter(col_idx)}{row_idx}"
 
-                if cell_coord in visited or is_empty(cell):
+                if cell_coord in visited or is_cell_empty(cell):
                     continue
 
                 end_row, end_col = self.find_table_end(openpyxl_ws, row_idx, col_idx)
