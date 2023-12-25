@@ -20,7 +20,6 @@ class TableDetector(BaseTableDetector):
             if not is_cell_empty(cell):
                 non_empty_cells_tables[(row_idx, col_idx)] = None
 
-        print(f"Non-empty cells: {non_empty_cells_tables}")
         # Join cells in continuous ranges
         for i, cell_coordinate in enumerate(non_empty_cells_tables.keys(), start=1):
             if non_empty_cells_tables[cell_coordinate] is None:
@@ -39,7 +38,6 @@ class TableDetector(BaseTableDetector):
                     max(continuous_ranges[table_idx][3], cell_coordinate[0])
                 )
         ranges = continuous_ranges.values()
-        print(f"Continuous ranges: {ranges}")
 
         # Apply waterfall algorithm to find the lower bound of each table
         merged_ranges = ranges
@@ -49,6 +47,5 @@ class TableDetector(BaseTableDetector):
         tables = []
         for min_col, min_row, max_col, max_row in merged_ranges:
             tables.append(get_excel_coordinate(min_col, min_row, max_col, max_row))
-        print(f"Table ranges: {tables}")
 
         return tables
