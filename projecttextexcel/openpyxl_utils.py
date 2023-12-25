@@ -1,8 +1,13 @@
+import warnings
 from openpyxl.utils import range_boundaries, get_column_letter
 
 
 def get_merged_openpyxl_cell(openpyxl_ws, openpyxl_cell):
-    merged_range = [s for s in openpyxl_ws.merged_cells.ranges if openpyxl_cell.coordinate in s]
+    try:
+        merged_range = [s for s in openpyxl_ws.merged_cells.ranges if openpyxl_cell.coordinate in s]
+    except AttributeError:
+        merged_range = []
+        warnings.warn(f"Workbook's merged cells can't be parsed in read-only mode.")
     if merged_range:
         return openpyxl_ws.cell(merged_range[0].min_row, merged_range[0].min_col)
     else:
