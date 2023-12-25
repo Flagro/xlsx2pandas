@@ -1,4 +1,4 @@
-from openpyxl.utils import range_boundaries
+from openpyxl.utils import range_boundaries, get_column_letter
 
 
 def get_merged_openpyxl_cell(openpyxl_ws, openpyxl_cell):
@@ -37,3 +37,9 @@ def range_generator(openpyxl_ws, table_range):
 
 def is_cell_empty(openpyxl_cell):
     return openpyxl_cell is None or openpyxl_cell.value is None or openpyxl_cell.value == ""
+
+
+def get_excel_coordinate(min_col, min_row, max_col=None, max_row=None):
+    if max_col is None and max_row is None:
+        return f"{get_column_letter(min_col)}{min_row}"
+    return f"{get_column_letter(min_col)}{min_row}:{get_column_letter(max_col)}{max_row}"
