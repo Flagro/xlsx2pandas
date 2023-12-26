@@ -18,6 +18,3 @@ dependencies = [
     "openpyxl",
     "pandas"
 ]
-
-[tool.setuptools]
-scripts = ["bin/projecttextexcel"]
