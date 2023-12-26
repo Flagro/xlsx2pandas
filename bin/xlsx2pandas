@@ -4,8 +4,8 @@
 
 import sys
 import json
-from projecttextexcel.cli import get_args
-from projecttextexcel import get_df
+from xlsx2pandas.cli import get_args
+from xlsx2pandas import get_df
 
 
 def main():

@@ -1,6 +1,6 @@
-# 🚀 **ProjectTextExcel**
+# 🚀 **xlsx2pandas (PandasXcelerator)**
 
-Part of a [`ProjectText Suite`](https://github.com/Flagro/ProjectTextSuite). ProjectTextExcel is a Python library for extraction of tables in Excel sheets into a pandas DataFrames.
+Part of a [`ProjectText Suite`](https://github.com/Flagro/ProjectTextSuite). xlsx2pandas (PandasXcelerator) is a Python library for extraction of tables in Excel sheets into a pandas DataFrames.
 
 ## 🌟 **Features**
 TODO: features
@@ -12,4 +12,4 @@ TODO: installation
 TODO: usage
 
 ## 🤝 **Collaboration & Issues**
-Open for collaboration; check the [issues page](https://github.com/Flagro/ProjectTextExcel/issues) for discussions.
+Open for collaboration; check the [issues page](https://github.com/Flagro/xlsx2pandas/issues) for discussions.

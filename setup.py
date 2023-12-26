@@ -1,5 +1,5 @@
 from setuptools import setup
 
 setup(
-    scripts=['bin/projecttextexcel']
+    scripts=['bin/*']
 )
