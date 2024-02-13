@@ -7,7 +7,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "xlsx2pandas"
-version = "0.1.0"
+version = "0.0.0"
 description = "Library for obtaining pandas dataframes from xlsx and xlsm files"
 readme = "README.md"
 authors = [
